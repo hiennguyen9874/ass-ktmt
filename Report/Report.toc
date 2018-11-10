@@ -1,0 +1,6 @@
+\contentsline {section}{\numberline {1}Đề bài}{2}{section.1}
+\contentsline {section}{\numberline {2}Ý tưởng hiện thực}{2}{section.2}
+\contentsline {section}{\numberline {3}Chọn phần tử key (pivot)}{2}{section.3}
+\contentsline {section}{\numberline {4}Hướng dẫn sử dụng}{2}{section.4}
+\contentsline {section}{\numberline {5}Thống kê số lệnh và loại lệnh}{2}{section.5}
+\contentsline {section}{Tài liệu tham khảo}{3}{section.5}

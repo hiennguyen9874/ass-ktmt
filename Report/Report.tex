@@ -1,0 +1,244 @@
+% !TEX program = lualatex
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+%\usepackage[english,vietnam]{babel}
+%\usepackage{vntex}
+\usepackage{a4wide,epsfig,latexsym,array,hhline,fancyhdr}
+\usepackage{amsmath}
+%\usepackage{unicode-math}
+%\usepackage{polyglossia}
+\usepackage{amsthm}
+\usepackage{multicol,longtable,amscd}
+%\usepackage{diagbox}	%Make diagonal lines in tables
+%\usepackage{booktabs}
+%\usepackage{alltt}
+\usepackage[framemethod=tikz]{mdframed}	% For highlighting paragraph backgrounds
+\usepackage{caption,subcaption}
+%\usepackage{lastpage}
+\usepackage[lined,boxed,commentsnumbered]{algorithm2e}
+%\usepackage{enumerate}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{rotating}
+\usepackage{graphics}
+%\usepackage{geometry}
+%\usepackage{setspace}
+%\usepackage{tikz}
+\usepackage[unicode]{hyperref}
+\hypersetup{urlcolor=blue,linkcolor=black,citecolor=black,colorlinks=true} 
+%\usepackage{pstcol} 								% PSTricks with the standard color package
+
+\newtheorem{theorem}{{\bf Định lý}}
+\newtheorem{property}{{\bf Tính chất}}
+\newtheorem{proposition}{{\bf Mệnh đề}}
+\newtheorem{corollary}[proposition]{{\bf Hệ quả}}
+\newtheorem{lemma}[proposition]{{\bf Bổ đề}}
+
+
+%\usepackage{fancyhdr}
+\setlength{\headheight}{40pt}
+\pagestyle{fancy}
+\fancyhead{} % clear all header fields
+\fancyhead[L]{
+	\begin{tabular}{rl}
+		\begin{picture}(25,15)(0,0)
+		\put(0,-8){\includegraphics[width=8mm, height=8mm]{Images/LogoBK.jpg}}
+		%\put(0,-8){\epsfig{width=10mm,figure=hcmut.eps}}
+		\end{picture}&
+		%\includegraphics[width=8mm, height=8mm]{hcmut.png} & %
+		\begin{tabular}{l}
+			\textbf{\bf \ttfamily Trường Đại Học Bách Khoa Tp.Hồ Chí Minh}\\
+			\textbf{\bf \ttfamily Khoa Khoa Học và Kỹ Thuật Máy Tính}
+		\end{tabular} 	
+	\end{tabular}
+}
+\fancyhead[R]{
+	\begin{tabular}{l}
+		\tiny \bf \\
+		\tiny \bf 
+\end{tabular}  }
+\fancyfoot{} % clear all footer fields
+\fancyfoot[L]{\scriptsize \ttfamily Báo cáo bài tập lớn một, môn kiến trúc máy tính - Niên khóa 2018-2019}
+\fancyfoot[R]{\scriptsize \ttfamily Trang {\thepage}}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0.3pt}
+
+
+%%%
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{3}
+\makeatletter
+\newcounter {subsubsubsection}[subsubsection]
+\renewcommand\thesubsubsubsection{\thesubsubsection .\@alph\c@subsubsubsection}
+\newcommand\subsubsubsection{\@startsection{subsubsubsection}{4}{\z@}%
+	{-3.25ex\@plus -1ex \@minus -.2ex}%
+	{1.5ex \@plus .2ex}%
+	{\normalfont\normalsize\bfseries}}
+\newcommand*\l@subsubsubsection{\@dottedtocline{3}{10.0em}{4.1em}}
+\newcommand*{\subsubsubsectionmark}[1]{}
+\makeatother
+
+\everymath{\color{blue}}%make in-line maths symbols blue to read/check easily
+
+\sloppy
+\captionsetup[figure]{labelfont={small,bf},textfont={small,it},belowskip=-1pt,aboveskip=-9pt}
+%space remove between caption, figure, and text
+\captionsetup[table]{labelfont={small,bf},textfont={small,it},belowskip=-1pt,aboveskip=7pt}
+%space remove between caption, table, and text
+
+%\floatplacement{figure}{H}%forced here float placement automatically for figures
+%\floatplacement{table}{H}%forced here float placement automatically for table
+%the following settings (11 lines) are to remove white space before or after the figures and tables
+%\setcounter{topnumber}{2}
+%\setcounter{bottomnumber}{2}
+%\setcounter{totalnumber}{4}
+%\renewcommand{\topfraction}{0.85}
+%\renewcommand{\bottomfraction}{0.85}
+%\renewcommand{\textfraction}{0.15}
+%\renewcommand{\floatpagefraction}{0.8}
+%\renewcommand{\textfraction}{0.1}
+\setlength{\floatsep}{5pt plus 2pt minus 2pt}
+\setlength{\textfloatsep}{5pt plus 2pt minus 2pt}
+\setlength{\intextsep}{10pt plus 2pt minus 2pt}
+\usetikzlibrary{calc}
+\usepackage{longtable}
+
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+	language=C++,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
+}
+\usepackage{verbatim}
+
+
+\begin{document}
+	
+	\begin{titlepage}
+		\begin{tikzpicture}[remember picture, overlay]
+		\draw[line width = 3pt,color=blue] ($(current page.north west) + (2.2cm,-2.2cm)$) rectangle ($(current page.south east)
+		+ (-2.2cm,2.2cm)$);
+		\draw[line width = 2pt,color=green] ($(current page.north west) + (2cm,-2cm)$) rectangle ($(current page.south east)
+		+ (-2cm,2cm)$);
+		\end{tikzpicture}
+		\vspace{1cm}
+		\begin{center} \large
+			ĐẠI HỌC BÁCH KHOA THÀNH PHỐ HỒ CHÍ MINH \\
+			\textbf{KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH} \\
+			- - - - - - - - - - - - - - - - - - - - -
+		\end{center}
+		
+		
+		\vspace{1cm}
+		\begin{figure}[h!]
+			\begin{center}
+				\includegraphics[width=3.6cm]{Images/LogoBK.jpg}
+			\end{center}
+		\end{figure}
+		\vspace{1cm}
+		
+		
+		
+		\begin{center}
+			\begin{tabular}{c}
+				\multicolumn{1}{c}{\textbf{{\Large KIẾN TRÚC MÁY TÍNH}}}    \\
+				\\ \hline \\
+				\multicolumn{1}{l}{\textbf{{\Large Nhóm: Nh\_L03\_14 --- Bài tập lớn 1}}}\\
+				\\
+				\textbf{{\Huge Kiến trúc tập lệnh MIPS}}              \\
+				\\ \hline \\
+			\end{tabular}
+		\end{center}
+		
+		
+		
+		\begin{table}[h]
+			\begin{tabular}{rrlrr}
+				\hspace{3cm}
+				& {\large Giáo viên hướng dẫn}: & {\large Nguyễn Xuân Minh}   &         & \\
+				& {}							& {\large Võ Tấn Phương}   &         & \\
+				& {\large Sinh viên}:           & {\large Nguyễn Văn Hoàng} & 1711400 & \\
+				& {}                            & {\large Nguyễn Xuân Hiến } & 1652192 & \\
+			\end{tabular}
+		\end{table}
+		
+		\vspace{2cm}
+		
+		\begin{center}
+			{\footnotesize Thành phố Hồ Chí Minh, 11/2018}
+		\end{center}
+		
+	\end{titlepage}
+
+\newpage
+\thispagestyle{empty}
+\tableofcontents
+
+\newpage
+
+\section{Đề bài}
+Viết chương trình sắp xếp chuỗi số thực 20 phần tử nhập từ bàn phím dùng giải thuật Quick sort. Yêu cầu xuất kết quả từng bước chạy ra màn hình.
+\section{Ý tưởng hiện thực}
+Quick sort là một trong những thuật toán chia để trị. Quick sort chia một mảng lớn của chúng ta thành hai mảng con nhỏ hơn: mảng có phần tử nhỏ và mảng có phần tử lớn. Sau đó Quick sort có thể sort các mảng con này bằng phương pháp đệ quy. Các bước ý tưởng của Quick sort là:
+\begin{itemize}
+	\item Chọn một phần tử để so sánh, chúng ta gọi đây là phần tử key, từ trong mảng đầu tiên của chúng ta.
+	\item Sau đó phân vùng và sort mảng con của sau phân vùng của chúng ta làm sao cho các phần tử lớn hơn phần tử Key nằm sau(bên phải) và các phần tử bé hơn phần tử Key nằm trước(bên trái). Đây được gọi là quá trình phân vùng.
+	\item Cuối cùng là đệ quy sử dụng các bước trên cho các mảng với phần tử bé hơn và phân tách với các phần tử lớn hơn sau khi phân vùng.
+\end{itemize}
+\section{Chọn phần tử key (pivot)}
+Kỹ thuật chọn phần tử chốt ảnh hưởng khá nhiều đến khả năng rơi vào các vòng lặp vô hạn đối với các trường hợp đặc biệt. Tốt nhất là chọn phần tử chốt là trung vị của danh sách. Khi đó sau $log_2 n$ lần phân chia ta sẽ đạt tới kích thước danh sách bằng 1. Tuy nhiên điều đó rất khó. Có các cách chọn phần tử chốt như sau:
+\begin{itemize}
+	\item Chọn phần tử đứng đầu hoặc đứng cuối làm phần tử chốt.
+	\item Chọn phần tử đứng giữa danh sách làm phần tử chốt.
+	\item Chọn phần tử trung vị trong 3 phần tử đứng đầu, đứng giữa và đứng cuối làm phần tử chốt.
+	\item Chọn phần tử ngẫu nhiên làm phần tử chốt. (Cách này có thể dẫn đến khả năng rơi vào các trường hợp đặc biệt)	
+\end{itemize}
+Trong bài tập lớn này chúng ta sẽ chọn cách thứ 2.
+\section{Hướng dẫn sử dụng}
+Bạn sẽ có ba cách để nhập vào một mảng:
+\begin{itemize}
+	\item Cách 1: Bạn tự nhập vào một mảng số thực 20 phần tử.
+	\item Cách 2: Ramdom một mảng số thực 20 phần tử.
+	\item Cách 3: Sử dụng mảng mặc định.
+\end{itemize}
+Sau khi có được mảng số thực, chương trình sẽ sử dụng thuật toán quick sort để sắp xếp mảng của bạn và in ra màn hình kết quả sau khi sắp xếp.
+\section{Thống kê số lệnh và loại lệnh}
+
+
+
+
+
+
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\addcontentsline{toc}{section}{Tài liệu tham khảo}
+\begin{thebibliography}{99999}
+	\bibitem[tvtt]{tvtt} {Thư viện trung tâm, Đại học Quốc gia Tp.HCM: \url{http://www.vnulib.edu.vn/#1}}.
+	\bibitem[qt]{qt}{ Học Qt cơ bản: \url{http://phocode.com/qt-5/lap-trinh-qt5-c/}}.
+	\bibitem[sqlite]{sqlite}{ Học sqlite cơ bản: \url{http://vietjack.com/sqlite/index.jsp}}.
+	\bibitem[data]{sqlite}{ Dữ liệu sách: \url{https://www.goodreads.com/list/tag/best}}.
+	\bibitem[data]{sqlite}{ Dữ liệu sách: \url{http://site.ebrary.com/lib/hcmut/home.action}}.
+	
+\end{thebibliography}
+
+\end{document}
+
