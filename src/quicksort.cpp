@@ -89,7 +89,7 @@ int main()
         break;
     }
     default:
-        cout << "Bạn chọn sai!" << endl;
+        cout << "Ban lua chon sai!" << endl;
     }
 
     cout << "Mang cua ban truoc khi su dung quickSort:" << endl;

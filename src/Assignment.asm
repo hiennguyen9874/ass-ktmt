@@ -1,64 +1,63 @@
     .data
-key: .float 0
-number: .word 19
-heso64:	.float 200.0
-hesoam32:	.float -100.0
-data: .float 0:20
-#data:	.float 3, -2.3, 8.6, -15.3, 2.6, 10.0, -15.6, 5.6
-endline: .asciiz "\n"
-luachon: .asciiz "Lua chon phuong an: "
-pa1: .asciiz "1. Nhap vao mang."
-pa2: .asciiz "2. Ramdom mot mang."
-nhappt: .asciiz "Nhap vao phan tu thu "
-sai: .asciiz "Ban chon sai!"
-truoc: .asciiz "Mang cua ban truoc khi su dung quickSort: "
-sau: .asciiz "Mang cua ban sau khi su dung quickSort: "
-space: .asciiz " "
-space1: .asciiz " :"
+key:        .float  0
+number:     .word   19
+heso64:	    .float  200.0
+hesoam32:	.float  -100.0
+data:       .float  0:20
+endline:    .asciiz "\n"
+luachon:    .asciiz "Lua chon phuong an: "
+pa1:        .asciiz "1. Nhap vao mang."
+pa2:        .asciiz "2. Ramdom mot mang."
+nhappt:     .asciiz "Nhap vao phan tu thu "
+sai:        .asciiz "Ban chon sai!"
+truoc:      .asciiz "Mang cua ban truoc khi su dung quickSort: "
+sau:        .asciiz "Mang cua ban sau khi su dung quickSort: "
+space:      .asciiz " "
+space1:     .asciiz ": "
     .text
     .globl main
 main:
-    li $v0, 4		# print("1. Nhap vao mang.\n")
+    li $v0, 4		                # print("1. Nhap vao mang.\n")
     la $a0, pa1
     syscall
     li $v0, 4
     la $a0, endline
     syscall
     
-    li $v0, 4		# print("2. Ramdom mot mang\n")
+    li $v0, 4		                # print("2. Ramdom mot mang\n")
     la $a0, pa2
     syscall
     li $v0, 4
     la $a0, endline
     syscall
     
-    li $v0, 4		# print("Lua chon phuong an: \n")
+    li $v0, 4		                # print("Lua chon phuong an: \n")
     la $a0, luachon
     syscall
     
-    li $v0, 5		# read integer
+    li $v0, 5		                # read integer
     syscall
     addi $t0, $zero, 1
     addi $t1, $zero, 2
     
-    beq $v0, $t0, nhapmang		# if v0 == 1 then jump to nhapmang
-    beq $v0, $t1, ramdom		# if vo == 2 then jump to ramdom
+    beq $v0, $t0, nhapmang		    # if $v0 == 1 then jump to nhapmang
+    beq $v0, $t1, ramdom		    # if $vo == 2 then jump to ramdom
     
-    li $v0, 4		# print("Ban chon sai!\n")
+    li $v0, 4		                # print("Ban chon sai!\n")
     la $a0, sai
     syscall
     li $v0, 4
     la $a0, endline
     syscall
-    j exit			# jump to exit
+    j exit			                # jump to exit
 
 nhapmang:
-    addi $t0, $zero, 0		# i = 0
-    lw $t1, number			# load Max index cua array
-    la $s0, data			# load Array
+    addi $t0, $zero, 0		        # i = 0
+    lw $t1, number			        # load Max index cua array
+    la $s0, data			        # load Array
 loopnhap:
-    bgt $t0, $t1, exitnhap	# if i > index then jump to exitnhap
-    li $v0, 4				# print("Nhap vao phan tu thu %d", i)
+    bgt $t0, $t1, exitnhap	        # if i > index then jump to exitnhap
+    li $v0, 4				        # print("Nhap vao phan tu thu %d", i)
     la $a0, nhappt
     syscall
     
@@ -68,37 +67,37 @@ loopnhap:
     li $v0, 4
     la $a0, space1
     syscall
-    li $v0, 6				# read float to $f0
+    li $v0, 6				        # read float to $f0
     syscall
-    sll $t3, $t0, 2			# $t3 = i*4
-    add $t2, $s0, $t3		# $t2 = data + i*4
-    swc1 $f0, 0($t2)		# data[i] = $f0
-    addi $t0, $t0, 1		# i++
-    j loopnhap				# jump to loopnhap
-exitnhap:	
-    j sort					# jump to sort
+    sll $t3, $t0, 2			        # $t3 = i*4
+    add $t2, $s0, $t3		        # $t2 = data + i*4
+    swc1 $f0, 0($t2)		        # data[i] = $f0
+    addi $t0, $t0, 1		        # i++
+    j loopnhap				        # jump to loopnhap
+exitnhap:
+    j sort					        # jump to sort
     
 ramdom:
-    addi $t0, $zero, 0		# i = 0
-    lw $t1, number			# load max index of array := size(array) - 1
-    la $s0, data			# load data
+    addi $t0, $zero, 0		        # i = 0
+    lw $t1, number			        # load max index of array := size(array) - 1
+    la $s0, data			        # load data
 loopRamdom:
-    bgt $t0, $t1, sort		# if i > index then jump to sort
-    li $v0, 43					# ramdom so thuc tu 0 toi 1, luu vao thanh ghi $f0
+    bgt $t0, $t1, sort		        # if i > index then jump to sort
+    li $v0, 43					    # ramdom so thuc tu 0 toi 1, luu vao thanh ghi $f0
     syscall
-    lwc1 $f1, heso64			# $f1 = heso64
-    lwc1 $f2, hesoam32			# $f2 = heso32
-    mul.s $f0, $f0, $f1			# $f0 = $f0 * 64
-    add.s $f0, $f0, $f2			# f0 = hesoam32 + heso64 * $f0{ = -Maxrand + (Maxrand + Maxrand) * rand() / RAND_MAX;}
+    lwc1 $f1, heso64			    # $f1 = heso64
+    lwc1 $f2, hesoam32			    # $f2 = heso32
+    mul.s $f0, $f0, $f1			    # $f0 = $f0 * 64
+    add.s $f0, $f0, $f2			    # $f0 = hesoam32 + heso64 * $f0{ = -Maxrand + (Maxrand + Maxrand) * rand() / RAND_MAX;}
     
-    sll $t3, $t0, 2				# $t3 = i*4
-    add $t2, $s0, $t3			# $t2 = data + i*4
-    swc1 $f0, 0($t2)			# data[i] = $f0
-    addi $t0, $t0, 1			# i++
-    j loopRamdom				# jump to loopRamdom
+    sll $t3, $t0, 2				    # $t3 = i*4
+    add $t2, $s0, $t3			    # $t2 = data + i*4
+    swc1 $f0, 0($t2)			    # data[i] = $f0
+    addi $t0, $t0, 1			    # i++
+    j loopRamdom				    # jump to loopRamdom
         
 sort:
-    la $s0, data				# In mang truoc khi chay quick Sort
+    la $s0, data				    # In mang truoc khi chay quick Sort
     li $v0, 4
     la $a0, truoc
     syscall
@@ -106,17 +105,17 @@ sort:
     la $a0, endline
     syscall
     
-    move $a0, $s0				# $a0 = $s0
-    addi $a1, $zero, 0			# $a1 = 0
-    lw $a2, number				# $a2 = number
-    jal printArray				# printf(Data, 0, number) // goi ham in ra mang
+    move $a0, $s0				    # $a0 = $s0
+    addi $a1, $zero, 0			    # $a1 = 0
+    lw $a2, number				    # $a2 = number
+    jal printArray				    # printf(Data, 0, number) // goi ham in ra mang
     
-    move $a0, $s0				# $a0 = $s0
-    addi $a1, $zero, 0			# $a1 = 0
-    lw $a2, number				# $a2 = number
-    jal quickSort				# quickSort(data, 0, number) // goi ham quick sort
+    move $a0, $s0				    # $a0 = $s0
+    addi $a1, $zero, 0			    # $a1 = 0
+    lw $a2, number				    # $a2 = number
+    jal quickSort				    # quickSort(data, 0, number) // goi ham quick sort
     
-    li $v0, 4					# In mang truoc khi chay quick Sort
+    li $v0, 4					    # In mang truoc khi chay quick Sort
     la $a0, sau
     syscall
     li $v0, 4
@@ -155,8 +154,8 @@ quickSort:
     mflo $t0						# $t0 = (low + high) / 2
     
     
-    sll $t2, $t0, 2					# t0 = t0 * 4
-    add $t2, $s0, $t2				# t2 = (data) + t0
+    sll $t2, $t0, 2					# $t0 = t0 * 4
+    add $t2, $s0, $t2				# $t2 = (data) + t0
     lwc1 $f1, 0($t2)				# key = data[(low + high)/2]
     
     move $t0, $s1					# i
@@ -216,7 +215,7 @@ next1:
     move $a0, $s0
     move $a1, $t0
     move $a2, $s2
-    jal quickSort					# quickSort(data, low, j)
+    jal quickSort					# quickSort(data, i, high)
 
 exitquickSort:
     # Phuc hoi cac thanh ghi sau khi goi ham
@@ -233,24 +232,24 @@ exitquickSort:
     jr $ra
     
 printArray:
-    move $s0, $a0				# $s0 = data
-    move $t0, $a1				# $t0 = a
-    addi $t1, $a2, 1			# $t1 = b
+    move $s0, $a0				    # $s0 = data
+    move $t0, $a1				    # $t0 = a
+    addi $t1, $a2, 1			    # $t1 = b
     
 loopPrint:
-    bge $t0, $t1, exitPrint		# if a >= b then jump to exitPrint
-    sll $t3, $t0, 2				# $t3 = a*4
-    add $t2, $s0, $t3			# t2 = data + a*4
-    lwc1 $f12, 0($t2)			# f12 = data[a]
-    li $v0, 2					# print(data[a])
+    bge $t0, $t1, exitPrint		    # if a >= b then jump to exitPrint
+    sll $t3, $t0, 2				    # $t3 = a*4
+    add $t2, $s0, $t3			    # $t2 = data + a*4
+    lwc1 $f12, 0($t2)			    # $f12 = data[a]
+    li $v0, 2					    # print(data[a])
     syscall
-    li $v0, 4					# print(" ")
+    li $v0, 4					    # print(" ")
     la $a0, space		
     syscall
-    addi $t0, $t0, 1			# a = a+1
-    j loopPrint					# jump to loopPrint
+    addi $t0, $t0, 1			    # a = a+1
+    j loopPrint					    # jump to loopPrint
 exitPrint:
-    li $v0, 4					# print("\n")
+    li $v0, 4					    # print("\n")
     la $a0, endline
     syscall
         
@@ -267,20 +266,20 @@ swap:
     sw $t2, 4($sp)
     sw $ra, 0($sp)
 
-    move $t0, $a0				# t0 = data
-    move $t1, $a1				# t1 = a
-    move $t2, $a2				# t2 = b
+    move $t0, $a0				    # $t0 = data
+    move $t1, $a1				    # $t1 = a
+    move $t2, $a2				    # $t2 = b
     
-    sll $t1, $t1, 2				# t1 = t1 * 4
-    add $t1, $t0, $t1			# t1 = data + t1 * 4
-    lwc1 $f1, 0($t1)			# f1 = data[a]
+    sll $t1, $t1, 2				    # $t1 = t1 * 4
+    add $t1, $t0, $t1			    # $t1 = data + t1 * 4
+    lwc1 $f1, 0($t1)			    # $f1 = data[a]
     
-    sll $t2, $t2, 2				# t2 = t2 * 4
-    add $t2, $t0, $t2			# t2 = data + t2 * 4
-    lwc1 $f2, 0($t2)			# f2 = data[b]
+    sll $t2, $t2, 2				    # $t2 = t2 * 4
+    add $t2, $t0, $t2			    # $t2 = data + t2 * 4
+    lwc1 $f2, 0($t2)			    # $f2 = data[b]
     
-    swc1 $f2, 0($t1)			# data[a] = $f2
-    swc1 $f1, 0($t2)			# data[b] = $f1
+    swc1 $f2, 0($t1)			    # data[a] = $f2
+    swc1 $f1, 0($t2)			    # data[b] = $f1
     
     # Phuc hoi cac thanh ghi sau khi goi ham
     lw $ra, 0($sp)
