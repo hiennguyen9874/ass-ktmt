@@ -3,7 +3,7 @@
 #include <random>
 
 #define NUMBER 19
-#define Maxrand 100.0
+#define Maxrand 100000.0
 using namespace std;
 
 void swap(float data[], int a, int b)

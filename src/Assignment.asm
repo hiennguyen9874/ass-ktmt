@@ -1,10 +1,10 @@
     .data
 key:        .float  0
 number:     .word   19
-heso64:	    .float  200.0
-hesoam32:	.float  -100.0
+heso1:	    .float  20.0         # He so ramdom tu -1000.0 toi 1000.0
+heso2:	    .float  -10.0         # Tang he so neu ban muon ramdom lon hon. (heso1 + 2*heso2 = 0)
 data:       .float  0:20
-endline:    .asciiz "\n"
+endline:    .asciiz "\n"            # Xuong dong
 luachon:    .asciiz "Lua chon phuong an: "
 pa1:        .asciiz "1. Nhap vao mang."
 pa2:        .asciiz "2. Ramdom mot mang."
@@ -51,6 +51,8 @@ main:
     syscall
     j exit			                # jump to exit
 
+
+# Thuc hien nhap mang
 nhapmang:
     addi $t0, $zero, 0		        # i = 0
     lw $t1, number			        # load Max index cua array
@@ -85,17 +87,20 @@ loopRamdom:
     bgt $t0, $t1, sort		        # if i > index then jump to sort
     li $v0, 43					    # ramdom so thuc tu 0 toi 1, luu vao thanh ghi $f0
     syscall
-    lwc1 $f1, heso64			    # $f1 = heso64
-    lwc1 $f2, hesoam32			    # $f2 = heso32
+    lwc1 $f1, heso1			    # $f1 = heso1
+    lwc1 $f2, heso2			    # $f2 = heso32
     mul.s $f0, $f0, $f1			    # $f0 = $f0 * 64
-    add.s $f0, $f0, $f2			    # $f0 = hesoam32 + heso64 * $f0{ = -Maxrand + (Maxrand + Maxrand) * rand() / RAND_MAX;}
+    add.s $f0, $f0, $f2			    # $f0 = heso2 + heso1 * $f0{ = -Maxrand + (Maxrand + Maxrand) * rand() / RAND_MAX;}
     
     sll $t3, $t0, 2				    # $t3 = i*4
     add $t2, $s0, $t3			    # $t2 = data + i*4
     swc1 $f0, 0($t2)			    # data[i] = $f0
     addi $t0, $t0, 1			    # i++
     j loopRamdom				    # jump to loopRamdom
-        
+
+
+
+# Bat dau thuc hien sap xep
 sort:
     la $s0, data				    # In mang truoc khi chay quick Sort
     li $v0, 4
@@ -115,20 +120,26 @@ sort:
     lw $a2, number				    # $a2 = number
     jal quickSort				    # quickSort(data, 0, number) // goi ham quick sort
     
-    li $v0, 4					    # In mang truoc khi chay quick Sort
+    li $v0, 4					    # In mang sau khi chay quick Sort
     la $a0, sau
     syscall
     li $v0, 4
     la $a0, endline
     syscall
     
-    move $a0, $s0
-    addi $a1, $zero, 0
-    lw $a2, number
-    jal printArray
+    move $a0, $s0				    # $a0 = $s0
+    addi $a1, $zero, 0			    # $a1 = 0
+    lw $a2, number				    # $a2 = number
+    jal printArray                  # printf(Data, 0, number) // goi ham in ra mang
     
-    j exit
-    
+    j exit                          # Nhay toi exit
+
+
+
+#################################################
+# Hàm quick sort
+# void quickSort(data[], int a,int b);
+#################################################
 quickSort:
     # luu cac thanh ghi vao stack truoc khi goi ham
     addi $sp, $sp, -32
@@ -230,8 +241,21 @@ exitquickSort:
     addi $sp, $sp, 32
 
     jr $ra
-    
+
+
+#################################################
+# Hamm in ra mang data tu a toi b
+# void printArray(data[], int a,int b);
+#################################################
 printArray:
+    # Luu cac thanh ghi vao stack truoc khi goi ham
+    addi $sp, $sp, -20
+    sw $s0, 16($sp)
+    sw $t0, 12($sp)
+    sw $t1, 8($sp)
+    sw $t2, 4($sp)
+    sw $t3, 0($sp)
+
     move $s0, $a0				    # $s0 = data
     move $t0, $a1				    # $t0 = a
     addi $t1, $a2, 1			    # $t1 = b
@@ -252,19 +276,31 @@ exitPrint:
     li $v0, 4					    # print("\n")
     la $a0, endline
     syscall
-        
+
+    # Phuc hoi cac thanh ghi sau khi goi ham
+    lw $t3, 0($sp)
+    lw $t2, 4($sp)
+    lw $t1, 8($sp)
+    lw $t0, 12($sp)
+    lw $s0, 16($sp)
+    addi $sp, $sp, 24
+
     jr $ra						
 
+
+
+#################################################
+# Ham swap hai vi tri a va b trong mang data
+# void swap(data[], int a,int b); 
+#################################################
 swap:
-    # void swap(data, int a,int b);
     # Luu cac thanh ghi vao stack truoc khi goi ham
-    addi $sp, $sp, -24
-    swc1 $f2, 20($sp)
-    swc1 $f1, 16($sp)
-    sw $t0, 12($sp)
-    sw $t1, 8($sp)
-    sw $t2, 4($sp)
-    sw $ra, 0($sp)
+    addi $sp, $sp, -20
+    swc1 $f2, 16($sp)
+    swc1 $f1, 12($sp)
+    sw $t0, 8($sp)
+    sw $t1, 4($sp)
+    sw $t2, 0($sp)
 
     move $t0, $a0				    # $t0 = data
     move $t1, $a1				    # $t1 = a
@@ -282,13 +318,12 @@ swap:
     swc1 $f1, 0($t2)			    # data[b] = $f1
     
     # Phuc hoi cac thanh ghi sau khi goi ham
-    lw $ra, 0($sp)
-    lw $t2, 4($sp)
-    lw $t1, 8($sp)
-    lw $t0, 12($sp)
-    lwc1 $f1, 16($sp)
-    lwc1 $f2, 20($sp)
-    addi $sp, $sp, 24
+    lw $t2, 0($sp)
+    lw $t1, 4($sp)
+    lw $t0, 8($sp)
+    lwc1 $f1, 12($sp)
+    lwc1 $f2, 16($sp)
+    addi $sp, $sp, 20
     jr $ra
 exit:
     li $v0, 10
