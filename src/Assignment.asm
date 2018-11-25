@@ -87,8 +87,8 @@ loopRamdom:
     bgt $t0, $t1, sort		        # if i > index then jump to sort
     li $v0, 43					    # ramdom so thuc tu 0 toi 1, luu vao thanh ghi $f0
     syscall
-    lwc1 $f1, heso1			    # $f1 = heso1
-    lwc1 $f2, heso2			    # $f2 = heso32
+    lwc1 $f1, heso1			        # $f1 = heso1
+    lwc1 $f2, heso2			        # $f2 = heso32
     mul.s $f0, $f0, $f1			    # $f0 = $f0 * 64
     add.s $f0, $f0, $f2			    # $f0 = heso2 + heso1 * $f0{ = -Maxrand + (Maxrand + Maxrand) * rand() / RAND_MAX;}
     
